@@ -1,28 +1,106 @@
 package com.vervyle.lw8_oop.drawable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import com.vervyle.lw8_oop.drawable.render.Ray2D;
 import com.vervyle.lw8_oop.drawable.render.RayTracer;
 import com.vervyle.lw8_oop.drawable.render.Segment2D;
+import com.vervyle.lw8_oop.drawable.utils.MyColor;
+import com.vervyle.lw8_oop.drawable.utils.OutOfPaneException;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
 public abstract class RegularPolygon extends GraphicElement {
 
+    @JsonIgnore
     protected Shape shape;
+    @JsonProperty("center")
     protected Point2D center;
+    @JsonProperty("vertices")
     protected double[] vertices;
+    @JsonProperty("numberOfVertices")
     protected int numOfVertices;
+    @JsonProperty("radius")
     protected double radius;
+    @JsonProperty("color")
+    protected MyColor myColor;
+    @JsonIgnore
     protected Color color;
+
+    private void initMyColor() {
+        myColor = new MyColor(color.getRed(), color.getGreen(), color.getBlue(), color.getOpacity());
+    }
 
     protected RegularPolygon(Point2D center, Pane pane, Color color, double radius, int numOfVertices) {
         super(pane);
         this.center = center;
         this.radius = radius;
         this.color = color;
+        initMyColor();
         this.numOfVertices = numOfVertices;
+    }
+
+    protected RegularPolygon() {
+
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
+
+    public Point2D getCenter() {
+        return center;
+    }
+
+    public void setCenter(Point2D center) {
+        this.center = center;
+    }
+
+    public double[] getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(double[] vertices) {
+        this.vertices = vertices;
+    }
+
+    public int getNumOfVertices() {
+        return numOfVertices;
+    }
+
+    public void setNumOfVertices(int numOfVertices) {
+        this.numOfVertices = numOfVertices;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public MyColor getMyColor() {
+        return myColor;
+    }
+
+    public void setMyColor(MyColor myColor) {
+        this.myColor = myColor;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
@@ -94,6 +172,7 @@ public abstract class RegularPolygon extends GraphicElement {
     @Override
     public void changeColor(Color newColor) {
         color = newColor;
+        initMyColor();
         updateShape();
     }
 
@@ -109,6 +188,19 @@ public abstract class RegularPolygon extends GraphicElement {
         if (center.x - radius < 0 || center.x + radius > pane.getWidth())
             return true;
         return center.y - radius < 0 || center.y + radius > pane.getHeight();
+    }
+
+    @Override
+    public void postInit(Pane pane) {
+        color = new Color(
+                myColor.red(),
+                myColor.green(),
+                myColor.blue(),
+                myColor.alpha());
+        setPane(pane);
+        setSelected(false);
+        shape = new Polygon(vertices);
+        shape.setFill(color);
     }
 
     @Override

@@ -1,18 +1,29 @@
 package com.vervyle.lw8_oop.drawable.leafs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vervyle.lw8_oop.drawable.ElementType;
 import com.vervyle.lw8_oop.drawable.GraphicElement;
-import com.vervyle.lw8_oop.drawable.OutOfPaneException;
+import com.vervyle.lw8_oop.drawable.utils.MyColor;
+import com.vervyle.lw8_oop.drawable.utils.OutOfPaneException;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 public class CCircle extends GraphicElement {
 
+    @JsonProperty("radius")
     private double radius;
+    @JsonProperty("center")
     private Point2D center;
+    @JsonProperty("color")
+    private MyColor myColor;
+    @JsonIgnore
     private Color color;
+    @JsonIgnore
     private Shape shape;
 
     @Override
@@ -44,10 +55,12 @@ public class CCircle extends GraphicElement {
 
     public CCircle(Point2D point2D, double radius, AnchorPane pane, Color color) {
         super(pane);
+        type = ElementType.CIRCLE;
         center = point2D;
         this.color = color;
+        initMyColor();
         this.radius = radius;
-        this.shape = new Circle(center.x, center.y, this.radius, this.color);
+        this.shape = new Circle(center.x, center.y, this.radius, color);
     }
 
     @Override
@@ -63,10 +76,15 @@ public class CCircle extends GraphicElement {
         show();
     }
 
+    private void initMyColor() {
+        myColor = new MyColor(color.getRed(), color.getGreen(), color.getBlue(), color.getOpacity());
+    }
+
     @Override
     public void changeColor(Color newColor) {
         hide();
         color = newColor;
+        initMyColor();
         shape = new Circle(center.x, center.y, this.radius, this.color);
         show();
     }
@@ -95,5 +113,21 @@ public class CCircle extends GraphicElement {
         if (center.x - radius < 0 || center.x + radius > pane.getWidth())
             return true;
         return center.y - radius < 0 || center.y + radius > pane.getHeight();
+    }
+
+    @Override
+    public void postInit(Pane pane) {
+        color = new Color(
+                myColor.red(),
+                myColor.green(),
+                myColor.blue(),
+                myColor.alpha());
+        setPane(pane);
+        setSelected(false);
+        setType(ElementType.CIRCLE);
+        shape = new Circle(center.x, center.y, this.radius, color);
+    }
+
+    public CCircle() {
     }
 }

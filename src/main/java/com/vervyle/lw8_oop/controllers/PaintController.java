@@ -1,5 +1,7 @@
 package com.vervyle.lw8_oop.controllers;
 
+import com.vervyle.lw8_oop.drawable.ElementType;
+import com.vervyle.lw8_oop.drawable.GraphicElement;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -45,12 +48,19 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem menu_deselect_all;
 
+    @FXML
     private void onSave(ActionEvent actionEvent) {
+        workspace.save();
+    }
+
+    @FXML
+    private void onClose(ActionEvent actionEvent) {
 
     }
 
-    private void onExit(ActionEvent actionEvent) {
-
+    @FXML
+    private void onLoad(ActionEvent actionEvent) {
+        workspace.load();
     }
 
     private void mouseClickedHandler(MouseEvent mouseEvent) {
@@ -129,8 +139,6 @@ public class PaintController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initElementsGUI();
-        menu_save.setOnAction(this::onSave);
-        menu_exit.setOnAction(this::onExit);
         main_pane.setOnMouseClicked(this::mouseClickedHandler);
         scroll_pane.setOnKeyPressed(this::keyPressedHandler);
         workspaceInit();

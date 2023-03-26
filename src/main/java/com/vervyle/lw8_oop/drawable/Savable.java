@@ -16,20 +16,19 @@ public interface Savable extends Serializable {
             e.printStackTrace();
         }
     }
-
-
-    default Object load(ObjectInputStream objectInputStream) {
-        Objects.requireNonNull(objectInputStream);
-        Object obj = null;
-        try {
-            obj = objectInputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Не удалось найти класс: " + this.getClass().getName() + "\n");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Не удалось прочитать объект\n");
-            e.printStackTrace();
-        }
-        return obj;
-    }
+//
+//    default Object load(ObjectInputStream objectInputStream) {
+//        Objects.requireNonNull(objectInputStream);
+//        Object obj = null;
+//        try {
+//            obj = objectInputStream.readObject();
+//        } catch (ClassNotFoundException e) {
+//            System.out.println("Не удалось найти класс: " + this.getClass().getName() + "\n");
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            System.out.println("Не удалось прочитать объект\n");
+//            e.printStackTrace();
+//        }
+//        return obj;
+//    }
 }

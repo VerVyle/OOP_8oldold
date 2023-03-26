@@ -1,10 +1,15 @@
 package com.vervyle.lw8_oop.drawable.leafs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vervyle.lw8_oop.drawable.ElementType;
 import com.vervyle.lw8_oop.drawable.RegularPolygon;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+
+import java.io.FileReader;
 
 public class TTriangle extends RegularPolygon {
 
@@ -13,6 +18,7 @@ public class TTriangle extends RegularPolygon {
 
     public TTriangle(Point2D center, double radius, Pane pane, Color color) {
         super(center, pane, color, radius, NUM_OF_VERTICES);
+        type = ElementType.TRIANGLE;
         calcVertices(INIT_ANGLES);
         shape = new Polygon(vertices);
         shape.setFill(color);
@@ -25,6 +31,15 @@ public class TTriangle extends RegularPolygon {
         shape = new Polygon(vertices);
         shape.setFill(color);
         show();
+    }
+
+    @Override
+    public void postInit(Pane pane) {
+        super.postInit(pane);
+        type = ElementType.TRIANGLE;
+    }
+
+    public TTriangle() {
     }
 
     static {

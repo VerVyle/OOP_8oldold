@@ -4,6 +4,7 @@ import com.vervyle.lw8_oop.containers.MyList;
 import com.vervyle.lw8_oop.drawable.*;
 import com.vervyle.lw8_oop.drawable.leafs.*;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
+import com.vervyle.lw8_oop.drawable.utils.OutOfPaneException;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -25,7 +26,7 @@ public class ElementFactoryImpl implements ElementFactory {
     }
 
     @Override
-    public GraphicElement createElement(Point2D center, TYPES type) throws OutOfPaneException {
+    public GraphicElement createElement(Point2D center, ElementType type) throws OutOfPaneException {
         double radius = Double.parseDouble(tool_value.getText());
         if (center.x - radius < 0 || center.x + radius > pane.getWidth())
             throw new OutOfPaneException();

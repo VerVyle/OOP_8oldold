@@ -3,16 +3,18 @@ package com.vervyle.lw8_oop.drawable;
 import com.vervyle.lw8_oop.containers.MyLinkedList;
 import com.vervyle.lw8_oop.containers.MyList;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
+import com.vervyle.lw8_oop.drawable.utils.OutOfPaneException;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.util.Iterator;
 
-public class Group extends GraphicElement {
+public class GGroup extends GraphicElement {
     private final MyList<GraphicElement> children;
 
-    public Group(Pane pane) {
+    public GGroup(Pane pane) {
         super(pane);
+        type = ElementType.GROUP;
         children = new MyLinkedList<>();
     }
 
@@ -68,7 +70,7 @@ public class Group extends GraphicElement {
     }
 
     @Override
-    public void resize(double newSize) throws OutOfPaneException{
+    public void resize(double newSize) throws OutOfPaneException {
         Iterator<GraphicElement> iterator = iterator();
         while (iterator.hasNext()) {
             iterator.next().resize(newSize);
@@ -111,5 +113,10 @@ public class Group extends GraphicElement {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void postInit(Pane pane) {
+
     }
 }

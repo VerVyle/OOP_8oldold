@@ -1,7 +1,7 @@
 package com.vervyle.lw8_oop.controllers;
 
 import com.vervyle.lw8_oop.controllers.states.*;
-import com.vervyle.lw8_oop.drawable.OutOfPaneException;
+import com.vervyle.lw8_oop.drawable.utils.OutOfPaneException;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
@@ -60,6 +60,14 @@ public class Workspace {
         } catch (OutOfPaneException e) {
             System.out.println("Cannot move elements because they would be out of pane!");
         }
+    }
+
+    public void save() {
+        paneController.save();
+    }
+
+    public void load() {
+        paneController.load();
     }
 
     static {
