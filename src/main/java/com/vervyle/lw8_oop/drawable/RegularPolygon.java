@@ -49,7 +49,7 @@ public abstract class RegularPolygon extends GraphicElement {
     /**
      * @param point2D
      * @return
-     * @// TODO: 20.03.2023 обязательно переделать
+     * @// TODO: 26.03.2023 поправить реализацию потому что эта полный хлам
      */
     @Override
     public boolean anyFit(Point2D point2D) {
