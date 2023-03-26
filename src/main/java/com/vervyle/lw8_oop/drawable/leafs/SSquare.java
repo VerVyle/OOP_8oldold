@@ -4,6 +4,7 @@ import com.vervyle.lw8_oop.drawable.RegularPolygon;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 public class SSquare extends RegularPolygon {
@@ -18,6 +19,15 @@ public class SSquare extends RegularPolygon {
         width = Math.sqrt(2) * radius;
         shape = new Rectangle(center.x - width / 2, center.y - width / 2, width, width);
         shape.setFill(color);
+    }
+
+    @Override
+    protected void updateShape() {
+        hide();
+        calcVertices(INIT_ANGLES);
+        shape = new Polygon(vertices);
+        shape.setFill(color);
+        show();
     }
 
     @Override

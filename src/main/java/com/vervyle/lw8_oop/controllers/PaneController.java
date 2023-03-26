@@ -3,15 +3,15 @@ package com.vervyle.lw8_oop.controllers;
 import com.vervyle.lw8_oop.containers.MyLinkedList;
 import com.vervyle.lw8_oop.containers.MyList;
 import com.vervyle.lw8_oop.drawable.GraphicElement;
-import com.vervyle.lw8_oop.drawable.leafs.PPoint;
+import com.vervyle.lw8_oop.drawable.OutOfPaneException;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import com.vervyle.lw8_oop.factories.ElementFactory;
 import com.vervyle.lw8_oop.factories.ElementFactoryImpl;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 import java.util.Iterator;
 
@@ -21,6 +21,7 @@ public class PaneController {
     private final MyList<GraphicElement> container;
     private MyList<GraphicElement> selectedGroup;
     private final ElementFactory elementFactory;
+    private final ColorPicker tool_color;
 
     private void selectElement(GraphicElement graphicElement) {
         graphicElement.select();
@@ -35,8 +36,24 @@ public class PaneController {
     public PaneController(AnchorPane pane, ListView<String> tool_elements_list, ColorPicker tool_color, TextField tool_value) {
         this.tool_elements_list = tool_elements_list;
         container = new MyLinkedList<>();
+        this.tool_color = tool_color;
         selectedGroup = new MyLinkedList<>();
         elementFactory = new ElementFactoryImpl(pane, tool_color, tool_value, container, selectedGroup);
+
+        tool_color.setOnAction(actionEvent -> {
+            changeColorOnSelectedElements(tool_color.getValue());
+        });
+        tool_value.setOnAction(actionEvent -> {
+            double radius = 0;
+            try {
+                radius = Double.parseDouble(tool_value.getText());
+                resizeSelectedElements(radius);
+            } catch (OutOfPaneException e) {
+                tool_value.setText(Double.toString(radius));
+            } catch (NumberFormatException e) {
+                System.out.println("incorrect number");
+            }
+        });
     }
 
     public boolean anyFit(Point2D point2D) {
@@ -51,8 +68,7 @@ public class PaneController {
     public void selectAll(Point2D point2D) {
         Iterator<GraphicElement> iterator = container.iterator();
         iterator.forEachRemaining(element -> {
-            element.select(point2D);
-            if (element.anyFit(point2D))
+            if (element.select(point2D))
                 selectedGroup.add(element);
         });
     }
@@ -78,6 +94,7 @@ public class PaneController {
     }
 
     public void deselectAll() {
+        selectedGroup = new MyLinkedList<>();
         Iterator<GraphicElement> iterator = container.iterator();
         iterator.forEachRemaining(this::deselectElement);
     }
@@ -88,7 +105,7 @@ public class PaneController {
         graphicElement.show();
     }
 
-    public void addElement(Point2D point2D) {
+    public void addElement(Point2D point2D) throws OutOfPaneException {
         deselectAll();
         GraphicElement graphicElement = null;
         if (tool_elements_list.getSelectionModel().getSelectedItem().equals("Circle")) {
@@ -96,9 +113,6 @@ public class PaneController {
         }
         if (tool_elements_list.getSelectionModel().getSelectedItem().equals("Square")) {
             graphicElement = elementFactory.createElement(point2D, ElementFactory.TYPES.SQUARE);
-        }
-        if (tool_elements_list.getSelectionModel().getSelectedItem().equals("Line")) {
-            graphicElement = elementFactory.createElement(point2D, ElementFactory.TYPES.LINE);
         }
         if (tool_elements_list.getSelectionModel().getSelectedItem().equals("Pentagon")) {
             graphicElement = elementFactory.createElement(point2D, ElementFactory.TYPES.PENTAGON);
@@ -124,5 +138,35 @@ public class PaneController {
         iterator.forEachRemaining(GraphicElement::hide);
         selectedGroup = new MyLinkedList<>();
         selectLastCreated();
+    }
+
+    public void resizeSelectedElements(double size) throws OutOfPaneException {
+        Iterator<GraphicElement> iterator = selectedGroup.iterator();
+        GraphicElement graphicElement;
+        while (iterator.hasNext()) {
+            graphicElement = iterator.next();
+            graphicElement.resize(size);
+            graphicElement.select();
+        }
+    }
+
+    public void moveSelectedElements(double deltaX, double deltaY) throws OutOfPaneException {
+        Iterator<GraphicElement> iterator = selectedGroup.iterator();
+        GraphicElement graphicElement;
+        while (iterator.hasNext()) {
+            graphicElement = iterator.next();
+            graphicElement.move(deltaX, deltaY);
+            graphicElement.select();
+        }
+    }
+
+    public void changeColorOnSelectedElements(Color color) {
+        Iterator<GraphicElement> iterator = selectedGroup.iterator();
+        GraphicElement graphicElement;
+        while (iterator.hasNext()) {
+            graphicElement = iterator.next();
+            graphicElement.changeColor(color);
+            graphicElement.select();
+        }
     }
 }

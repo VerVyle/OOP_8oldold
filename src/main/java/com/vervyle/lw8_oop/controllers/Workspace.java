@@ -1,6 +1,7 @@
 package com.vervyle.lw8_oop.controllers;
 
 import com.vervyle.lw8_oop.controllers.states.*;
+import com.vervyle.lw8_oop.drawable.OutOfPaneException;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
@@ -28,7 +29,11 @@ public class Workspace {
     }
 
     public void addElement(Point2D point2D) {
-        paneController.addElement(point2D);
+        try {
+            paneController.addElement(point2D);
+        } catch (OutOfPaneException e) {
+            System.out.println("Cannot create elements because it's out of pane!");
+        }
     }
 
     public void deselectAll() {
@@ -47,6 +52,14 @@ public class Workspace {
 
     public void setState(WorkspaceState state) {
         this.state = state;
+    }
+
+    public void moveElements(double deltaX, double deltaY) {
+        try {
+            paneController.moveSelectedElements(deltaX, deltaY);
+        } catch (OutOfPaneException e) {
+            System.out.println("Cannot move elements because they would be out of pane!");
+        }
     }
 
     static {

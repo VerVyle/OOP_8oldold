@@ -65,13 +65,21 @@ public class PaintController implements Initializable {
     }
 
     private void keyPressedHandler(KeyEvent keyEvent) {
+        double step = Double.parseDouble(tool_value.getText());
         if (keyEvent.getCode() == KeyCode.DELETE)
             workspace.deleteSelectedElements();
+        if (keyEvent.getCode() == KeyCode.W)
+            workspace.moveElements(0, -1 * step);
+        if (keyEvent.getCode() == KeyCode.S)
+            workspace.moveElements(0, step);
+        if (keyEvent.getCode() == KeyCode.A)
+            workspace.moveElements(-1 * step, 0);
+        if (keyEvent.getCode() == KeyCode.D)
+            workspace.moveElements(step, 0);
     }
 
     private void initElementsGUI() {
         String[] elements = {
-                "Line",
                 "Circle",
                 "Triangle",
                 "Square",

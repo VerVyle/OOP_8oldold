@@ -18,6 +18,15 @@ public class TTriangle extends RegularPolygon {
         shape.setFill(color);
     }
 
+    @Override
+    protected void updateShape() {
+        hide();
+        calcVertices(INIT_ANGLES);
+        shape = new Polygon(vertices);
+        shape.setFill(color);
+        show();
+    }
+
     static {
         NUM_OF_VERTICES = 3;
         INIT_ANGLES = new double[NUM_OF_VERTICES];

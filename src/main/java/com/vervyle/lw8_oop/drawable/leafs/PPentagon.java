@@ -18,6 +18,24 @@ public class PPentagon extends RegularPolygon {
         shape.setFill(color);
     }
 
+    @Override
+    protected void updateShape() {
+        hide();
+        calcVertices(INIT_ANGLES);
+        shape = new Polygon(vertices);
+        shape.setFill(color);
+        show();
+    }
+
+    @Override
+    public void changeColor(Color newColor) {
+        hide();
+        this.color = newColor;
+        shape = new Polygon(vertices);
+        shape.setFill(color);
+        show();
+    }
+
     static {
         NUM_OF_VERTICES = 5;
         INIT_ANGLES = new double[NUM_OF_VERTICES];

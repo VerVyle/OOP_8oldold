@@ -4,7 +4,6 @@ import com.vervyle.lw8_oop.containers.MyList;
 import com.vervyle.lw8_oop.drawable.*;
 import com.vervyle.lw8_oop.drawable.leafs.*;
 import com.vervyle.lw8_oop.drawable.render.Point2D;
-import com.vervyle.lw8_oop.drawable.render.Segment2D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -26,19 +25,13 @@ public class ElementFactoryImpl implements ElementFactory {
     }
 
     @Override
-    public GraphicElement createElement(Point2D center, TYPES type) {
+    public GraphicElement createElement(Point2D center, TYPES type) throws OutOfPaneException {
+        double radius = Double.parseDouble(tool_value.getText());
+        if (center.x - radius < 0 || center.x + radius > pane.getWidth())
+            throw new OutOfPaneException();
+        if (center.y - radius < 0 || center.y + radius > pane.getHeight())
+            throw new OutOfPaneException();
         switch (type) {
-            case LINE -> {
-                GraphicElement lastCreated = container.getLast();
-                if (lastCreated instanceof PPoint) {
-                    Point2D start = ((PPoint) lastCreated).getPoint2D();
-                    lastCreated.hide();
-                    selectedGroup.remove(lastCreated);
-                    container.remove(lastCreated);
-                    return new LLine(new Segment2D(start, center), pane, tool_color.getValue());
-                }
-                return new PPoint(pane, center, tool_color.getValue());
-            }
             case CIRCLE -> {
                 return new CCircle(center, Double.parseDouble(tool_value.getText()), pane, tool_color.getValue());
             }
