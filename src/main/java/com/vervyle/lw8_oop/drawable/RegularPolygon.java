@@ -7,10 +7,6 @@ import com.vervyle.lw8_oop.drawable.render.Segment2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
-
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 public abstract class RegularPolygon extends GraphicElement {
 
     protected Shape shape;
@@ -43,7 +39,6 @@ public abstract class RegularPolygon extends GraphicElement {
         pane.getChildren().add(shape);
     }
 
-    @Override
     public void hide() {
         pane.getChildren().remove(shape);
     }
@@ -56,17 +51,17 @@ public abstract class RegularPolygon extends GraphicElement {
     @Override
     public boolean anyFit(Point2D point2D) {
         Point2D start = new Point2D(vertices[2 * numOfVertices - 2], vertices[2 * numOfVertices - 1]);
-        Point2D end = new Point2D(vertices[0], vertices[1]);
+        Point2D end;
         Segment2D edge;
         Ray2D ray = new Ray2D(point2D, new Point2D(0, 0));
         int i = 0;
         int counter = 0;
         do {
+            end = new Point2D(vertices[2 * i], vertices[2 * i + 1]);
             edge = new Segment2D(start, end);
-            if (RayTracer.doesCross(ray, edge))
+            if (RayTracer.doesCrossV2(ray, edge))
                 counter++;
             start = end;
-            end = new Point2D(vertices[2 * i], vertices[2 * i + 1]);
             i++;
         } while (i < numOfVertices);
         return counter % 2 == 1;

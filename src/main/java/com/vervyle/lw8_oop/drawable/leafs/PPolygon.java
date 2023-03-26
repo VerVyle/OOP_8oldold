@@ -15,6 +15,7 @@ public class PPolygon extends RegularPolygon {
         super(center, pane, color, radius, NUM_OF_VERTICES);
         calcVertices(INIT_ANGLES);
         shape = new Polygon(vertices);
+        shape.setFill(color);
     }
 
     static {
