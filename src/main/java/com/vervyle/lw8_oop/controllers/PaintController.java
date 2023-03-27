@@ -55,7 +55,7 @@ public class PaintController implements Initializable {
 
     @FXML
     private void onClose(ActionEvent actionEvent) {
-
+        workspace.close();
     }
 
     @FXML

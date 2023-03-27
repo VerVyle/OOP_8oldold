@@ -70,6 +70,10 @@ public class Workspace {
         paneController.load();
     }
 
+    public void close() {
+        paneController.clearPane();
+    }
+
     static {
         DEFAULT_STATE = new DefaultState();
         SELECT_INTERSECTIONS_STATE = new SelectIntersectionsState();

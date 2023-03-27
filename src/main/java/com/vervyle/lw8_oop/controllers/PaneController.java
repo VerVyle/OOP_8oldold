@@ -208,7 +208,7 @@ public class PaneController {
         }
     }
 
-    private void clearPane() {
+    public void clearPane() {
         Iterator<GraphicElement> iterator = container.iterator();
         while (iterator.hasNext()) {
             deleteElement(iterator.next());
@@ -232,10 +232,10 @@ public class PaneController {
         int size = 0;
         try {
             fileReader = new FileReader(file);
-            size = fileReader.read() - '0';
             bufferedReader = new BufferedReader(fileReader);
+            String buffer = bufferedReader.readLine();
+            size = Integer.parseInt(buffer);
             strings = new String[size * 2];
-            bufferedReader.readLine();
             for (int i = 0; i < size * 2; i++) {
                 strings[i] = bufferedReader.readLine();
             }
